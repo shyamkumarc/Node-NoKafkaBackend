@@ -14,4 +14,4 @@ we'll end up received connection refused errors.
 To prevent this , when setting up the Kafka cluster server, we need to update the server.properties file with the correct advertised listener address.
 IN my case, my kafka cluster server runs from 192/.168.43.173 (i am running this in my local network) and hence i've updated it to this IP address.
 
-A beautiful explanation of this can be found in confluent website : https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+A beautiful explanation of this can be found in confluent website : https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/ 
