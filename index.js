@@ -21,7 +21,7 @@ var app = express()
 //     });
 
 
-// ===============NO KAFKA============================
+// -----------------------------------NO-Kafka--------------------------------------------------------
 
 
 // var Kafka = require('no-kafka');
@@ -30,7 +30,7 @@ var app = express()
 // var consumer = new Kafka.SimpleConsumer({connectionString:'192.168.43.173:9092'});
 //  var producer = new Kafka.Producer({connectionString:'192.168.43.173:9092'});
  
- 
+ //-------------------------------------- producer code --------------------------------------
 //   return producer.init().then(function(){
 //   return producer.send({
 //        topic: 'quickstart-events',
@@ -45,8 +45,24 @@ var app = express()
 //    [ { topic: 'kafka-test-topic', partition: 0, offset: 353 } ]
 //   */
 //  });
+//-------------------------------------- producer code --------------------------------------
 
+//-------------------------------------- consumer code --------------------------------------
+// // data handler function can return a Promise
+// var dataHandler = function (messageSet, topic, partition) {
+//     messageSet.forEach(function (m) {
+//         console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
+//     });
+// };
  
+// return consumer.init().then(function () {
+//     // Subscribe partitons 0 and 1 in a topic:
+//     return consumer.subscribe('quickstart-events', [0], dataHandler);
+// });
+//-------------------------------------- consumer code --------------------------------------
+// -----------------------------------NO-Kafka--------------------------------------------------------
+
+
 // data handler function can return a Promise
 var dataHandler = function (messageSet, topic, partition) {
     messageSet.forEach(function (m) {
@@ -54,11 +70,6 @@ var dataHandler = function (messageSet, topic, partition) {
     });
 };
  
-// return consumer.init().then(function () {
-//     // Subscribe partitons 0 and 1 in a topic:
-//     return consumer.subscribe('quickstart-events', [0], dataHandler);
-// });
-
 
 // GET method route
 app.get('/', function (req, res) {
