@@ -1,10 +1,11 @@
 # Node-NoKafkaBackend
 this is a Express based service that can connect to a Kafka cluster configured at 192.168.43.173:9092
-#important node when connecting from remote systems to Kafka cluster
 
+# important note when connecting from remote systems to Kafka cluster server
 Kafka clusters are run based on server.properties config file , this file has an option to mention "advertised Listeners"
-When someone client (in this case , the no-Kafka node client), it connects to the  cluster port (default:9092) and queries for
-broker end points .It is these broker endpoints that the client actually connects to for consuming or producing Kafka topics.
+When some client (in this case , the no-Kafka node client),  connects to the  cluster port (default:9092) and queries for
+broker end points , It is these  "advertised Listeners" that are broadcast as 
+broker endpoints , and  the ones  client actually connects to for consuming or producing Kafka topics.
 
 BY default , the server config file's advertised listeners will be pointing to localhost:9092 , which means when a client connects
 and retrieves broker addresses , it'll end up assuming that the kafka broker is available at localhost : 9092(it own port 9092), and hence
