@@ -1,11 +1,11 @@
-var express = require('express')
-var app = express()
-
+var express = require('express');
+var app = express();
+var Kafka = require('no-kafka');
 // kafka node --------------------------------
 // var kafka = require('kafka-node'),
 //     Consumer = kafka.Consumer;
 //     const client = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
-    
+
 //      consumer = new Consumer(
 //         client,
 //         [
@@ -25,12 +25,12 @@ var app = express()
 
 
 // var Kafka = require('no-kafka');
- 
+
 
 // var consumer = new Kafka.SimpleConsumer({connectionString:'192.168.43.173:9092'});
 //  var producer = new Kafka.Producer({connectionString:'192.168.43.173:9092'});
- 
- //-------------------------------------- producer code --------------------------------------
+
+//-------------------------------------- producer code --------------------------------------
 //   return producer.init().then(function(){
 //   return producer.send({
 //        topic: 'quickstart-events',
@@ -54,7 +54,7 @@ var app = express()
 //         console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
 //     });
 // };
- 
+
 // return consumer.init().then(function () {
 //     // Subscribe partitons 0 and 1 in a topic:
 //     return consumer.subscribe('quickstart-events', [0], dataHandler);
@@ -69,7 +69,7 @@ var dataHandler = function (messageSet, topic, partition) {
         console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
     });
 };
- 
+
 
 // GET method route
 app.get('/', function (req, res) {
@@ -80,29 +80,31 @@ app.get('/', function (req, res) {
 // POST method route
 app.post('/', function (req, res) {
     // res.send('POST request to the homepage');
- var producer = new Kafka.Producer({connectionString:'192.168.43.173:9092'});
+    var producer = new Kafka.Producer({ connectionString: '192.168.43.173:9092' });
+    // push the data to body
+    var body = [];
+    req.on('data', (chunk) => {
+        body.push(chunk);
+    }).on('end', () => {
+        // on end of data, perform necessary action
+        body = Buffer.concat(body).toString();
 
- producer.init().then(function(){
-      return producer.send({
-           topic: 'quickstart-events',
-           partition: 0,
-           message: {
-               value: 'Hello!' + new Date().toLocaleTimeString()
-           }
-       });
-     })
-     .then(function (result) {
-        res.send('POST request to the homepage');
-       /*
-       [ { topic: 'kafka-test-topic', partition: 0, offset: 353 } ]
-      */
-     });
+        producer.init().then(function () {
+            return producer.send({
+                topic: 'quickstart-events',
+                partition: 0,
+                message: {
+                    value: new Date().toLocaleTimeString() + ' : ' + body.toString()
+                }
+            });
+        }).then(function (result) {
+            res.write("Posted to Kafka topic:'quickstart-events':  " + new Date().toLocaleTimeString() + ' : ' + body.toString());
+            res.end();
+        });
 
 
-    // return consumer.init().then(function () {
-    //     // Subscribe partitons 0 and 1 in a topic:
-    //     return consumer.subscribe('quickstart-events', [0], dataHandler);
-    // });
+
+    });
 
 })
 
